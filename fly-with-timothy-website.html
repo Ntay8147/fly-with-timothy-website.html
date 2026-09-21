@@ -40,6 +40,10 @@
   .card { background: #121212; border: 1px solid rgba(207,169,74,0.18); border-radius: 16px; padding: 32px 26px; display: flex; flex-direction: column; gap: 16px; }
   .icon-box { width: 44px; height: 44px; border-radius: 10px; background: rgba(207,169,74,0.12); display: flex; align-items: center; justify-content: center; }
 
+  .cabin { padding: 0 0 96px; }
+  .cabin-frame { position: relative; border-radius: 20px; border: 1px solid rgba(207,169,74,0.25); overflow: hidden; aspect-ratio: 16/9; background: #000; }
+  .cabin-frame video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
   .about { background: #0e0e0e; border-top: 1px solid rgba(207,169,74,0.14); border-bottom: 1px solid rgba(207,169,74,0.14); padding: 96px 0; }
   .about-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 56px; align-items: center; }
   .about-photo-wrap { position: relative; }
@@ -170,6 +174,20 @@
         <div style="font-size:17px;font-weight:600;color:#fff;">Aircraft Sourcing &amp; Consulting</div>
         <div style="font-size:14.5px;line-height:1.65;color:#b8b3a6;">Straight advice on aircraft type, operator vetting, and cost — before you commit to anything.</div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="cabin" id="cabin">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The Experience</div>
+      <h2 style="font-size:38px;">Step inside the cabin</h2>
+    </div>
+    <div class="cabin-frame">
+      <video autoplay muted loop playsinline preload="metadata" aria-label="Interior of a private jet cabin">
+        <source src="Jet Inside.mp4" type="video/mp4">
+      </video>
     </div>
   </div>
 </div>
