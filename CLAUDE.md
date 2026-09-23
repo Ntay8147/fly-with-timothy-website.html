@@ -4,14 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-A single self-contained static HTML page for "Fly With Timothy" — a private aviation broker landing site. There is no build system, no package manager, no framework, and no server-side code: everything (markup, CSS, SVG graphics, images, and JS) lives in one file, [fly-with-timothy-website.html](fly-with-timothy-website.html).
+A single self-contained static HTML page for "Fly With Timothy" — a private aviation broker landing site. There is no build system, no package manager, no framework, and no server-side code: everything (markup, CSS, SVG graphics, images, and JS) lives in one file, [index.html](index.html). It's named `index.html` (not a custom name) so static hosts like Vercel/GitHub Pages serve it at the root URL by default.
 
 ## Running / previewing
 
 Open the file directly in a browser — no dev server, install step, or build required:
 
 ```bash
-start fly-with-timothy-website.html
+start index.html
 ```
 
 ## File structure (all in one file)
@@ -24,6 +24,6 @@ start fly-with-timothy-website.html
 ## Editing notes
 
 - Contact details (email `hargiejalea23@gmail.com`, phone `0995 265 9699`, Instagram `@pjrottie`) appear multiple times (nav, contact section, footer, `sendInquiry`) — update all occurrences together.
-- The About section bio currently contains a placeholder: `[YOUR BIO — ...]` (around the `.about` block) — intended to be replaced with real copy.
+- The About section bio (Timothy Hood's background) lives in the `.about` block.
 - To replace a photo, swap the `data:image/...;base64,...` payload in the corresponding `<img src>`; don't try to reformat or reflow these lines.
 - Color theme is dark/gold: background `#0a0a0a`/`#121212`, accent gold `#cfa94a`/`#e6c877`, text `#f4f0e6`/`#b8b3a6`. Keep new UI consistent with these tokens rather than introducing new colors.
