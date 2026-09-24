@@ -66,6 +66,13 @@
   .footer-inner { padding: 32px; }
   .footer-grid { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
 
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 100; }
+  .modal-overlay[hidden] { display: none; }
+  .modal-card { background: #121212; border: 1px solid rgba(207,169,74,0.3); border-radius: 20px; padding: 40px 36px; max-width: 420px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .modal-icon { width: 56px; height: 56px; border-radius: 50%; background: rgba(207,169,74,0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+  .modal-card h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; color: #fff; font-size: 26px; margin: 0 0 12px; }
+  .modal-card p { font-size: 14.5px; line-height: 1.7; color: #b8b3a6; margin: 0 0 28px; }
+
   @media (max-width: 900px) {
     .nav-links { display: none; }
     .hero-grid { grid-template-columns: 1fr; }
@@ -281,6 +288,15 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="fwt-modal" hidden role="dialog" aria-modal="true" aria-labelledby="fwt-modal-title">
+  <div class="modal-card">
+    <div class="modal-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#cfa94a" stroke-width="1.8"><path d="M20 6L9 17l-5-5"></path></svg></div>
+    <h3 id="fwt-modal-title">Inquiry sent</h3>
+    <p>Thank you for reaching out — I've received your details and will be in touch personally to start planning your flight.</p>
+    <button type="button" class="btn-gold" style="padding:13px 32px;" onclick="document.getElementById('fwt-modal').hidden = true;">Close</button>
+  </div>
+</div>
+
 <script>
   function sendInquiryMailtoFallback(name, email, phone, details) {
     var ownerEmail = 'Timothy@flywithtimothy.com';
@@ -313,19 +329,28 @@
     })
       .then(function (res) { return res.ok ? res.json() : Promise.reject(res); })
       .then(function () {
-        submitBtn.textContent = 'Sent';
-        status.textContent = "Thanks — I've got your inquiry and will be in touch shortly.";
+        status.textContent = "Your inquiry goes straight to Timothy — he'll follow up personally.";
         e.target.reset();
+        document.getElementById('fwt-modal').hidden = false;
       })
       .catch(function () {
         status.textContent = "Couldn't reach the server — opening your email app instead.";
         sendInquiryMailtoFallback(name, email, phone, details);
+      })
+      .finally(function () {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Send Inquiry';
       });
 
     return false;
   }
+
+  document.getElementById('fwt-modal').addEventListener('click', function (e) {
+    if (e.target === this) this.hidden = true;
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') document.getElementById('fwt-modal').hidden = true;
+  });
 </script>
 
 </body>
