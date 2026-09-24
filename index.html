@@ -239,8 +239,8 @@
           <label for="fwt-details">Trip details</label>
           <textarea id="fwt-details" placeholder="Route, dates, number of passengers..." rows="4"></textarea>
         </div>
-        <button type="submit" class="btn-gold" style="padding:15px;">Send Inquiry</button>
-        <div style="font-size:12.5px;color:#8a8578;text-align:center;">This opens your email app with your message pre-filled, addressed to Fly With Timothy.</div>
+        <button type="submit" id="fwt-submit" class="btn-gold" style="padding:15px;">Send Inquiry</button>
+        <div id="fwt-status" style="font-size:12.5px;color:#8a8578;text-align:center;">Your inquiry goes straight to Timothy — he'll follow up personally.</div>
       </form>
 
       <div class="side-stack">
@@ -282,12 +282,7 @@
 </div>
 
 <script>
-  function sendInquiry(e) {
-    e.preventDefault();
-    var name = document.getElementById('fwt-name').value || 'website visitor';
-    var email = document.getElementById('fwt-email').value || '-';
-    var phone = document.getElementById('fwt-phone').value || '-';
-    var details = document.getElementById('fwt-details').value || '-';
+  function sendInquiryMailtoFallback(name, email, phone, details) {
     var ownerEmail = 'Timothy@flywithtimothy.com';
     var subject = 'New charter inquiry from ' + name;
     var body = 'Name: ' + name + '\n' +
@@ -296,6 +291,39 @@
                'Trip details:\n' + details;
     var url = 'mailto:' + ownerEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
     window.location.href = url;
+  }
+
+  function sendInquiry(e) {
+    e.preventDefault();
+    var name = document.getElementById('fwt-name').value || 'website visitor';
+    var email = document.getElementById('fwt-email').value || '-';
+    var phone = document.getElementById('fwt-phone').value || '-';
+    var details = document.getElementById('fwt-details').value || '-';
+    var submitBtn = document.getElementById('fwt-submit');
+    var status = document.getElementById('fwt-status');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+    status.textContent = 'Sending your inquiry...';
+
+    fetch('/api/inquiry', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name, email: email, phone: phone, details: details })
+    })
+      .then(function (res) { return res.ok ? res.json() : Promise.reject(res); })
+      .then(function () {
+        submitBtn.textContent = 'Sent';
+        status.textContent = "Thanks — I've got your inquiry and will be in touch shortly.";
+        e.target.reset();
+      })
+      .catch(function () {
+        status.textContent = "Couldn't reach the server — opening your email app instead.";
+        sendInquiryMailtoFallback(name, email, phone, details);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Inquiry';
+      });
+
     return false;
   }
 </script>
