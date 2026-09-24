@@ -17,7 +17,7 @@ start index.html
 ## File structure (all in one file)
 
 - `<style>` (head): all CSS, using custom properties-free plain rules and BEM-ish class names (`.hero`, `.services-grid`, `.card`, `.contact-grid`, etc.). Responsive breakpoints at 900px and 560px near the end of the `<style>` block.
-- `<body>`: sections in document order — sticky `.nav`, `.hero` (right side shows the full circular brand badge on a cream card — previously a hand-coded animated SVG jet, replaced per client request), `.services` (4-card grid), `.about` (bio + photos + the same brand badge again), `.contact` (inquiry form + info cards), `.footer`.
+- `<body>`: sections in document order — sticky `.nav`, `.hero` (right side shows the full circular brand badge, dropped in directly with no card wrapper — previously a hand-coded animated SVG jet, replaced per client request), `.services` (4-card grid), `.about` (bio + photos + the same brand badge again), `.contact` (inquiry form + info cards), `.footer`.
 - Photos are embedded directly as `data:image/jpeg;base64,...` / `data:image/png;base64,...` URIs inline in `<img src="...">` attributes. These base64 payloads are extremely long single lines (the largest are 50–160k characters) — when reading the file with tools that load it fully, these lines will blow the context budget. Read the file in narrow line-range slices (e.g. `offset`/`limit`, or `sed -n`) and skip over the giant image lines rather than loading the whole file at once.
 - `<script>` (end of body): `sendInquiry(e)` POSTs the contact form's fields as JSON to `/api/inquiry` (see below). On success it shows a thank-you message; on any failure it falls back to the old behavior — building a `mailto:` link and redirecting to it, so a lead is never silently lost even if the GHL integration is down.
 
@@ -41,7 +41,7 @@ If any of these are missing, the function returns a 500 without calling GHL (fai
 ## Editing notes
 
 - Contact details (email `Timothy@flywithtimothy.com`, phone `+1 (609) 418-0237`, Instagram `@pjrottie`) appear multiple times (nav, contact section, footer, `sendInquiry`) — update all occurrences together.
-- The About section bio (Timothy Hood's background) lives in the `.about` block. It ends with the full circular brand badge (base64 PNG), wrapped in a cream `#f4f0e6` card — the badge's own text is dark brown, so it needs a light background to stay legible; don't place it directly against the page's dark background.
+- The About section bio (Timothy Hood's background) lives in the `.about` block. It ends with the full circular brand badge (base64 JPEG). The current badge version has its own near-black background and bright gold text, so it's placed directly against the page background with no card wrapper — if a future logo revision uses a light/transparent background instead, wrap it in a light card (e.g. `background:#f4f0e6;border-radius:16px;padding:18px 22px;`) so dark text stays legible.
 - To replace a photo, swap the `data:image/...;base64,...` payload in the corresponding `<img src>`; don't try to reformat or reflow these lines.
 - When embedding a new base64 image, use a script (PowerShell/Node) to splice the base64 string into the file via a placeholder token rather than passing the full string through a text-editing tool — these payloads are 100k+ characters and will blow the context budget otherwise.
 - Color theme is dark/gold: background `#0a0a0a`/`#121212`, accent gold `#cfa94a`/`#e6c877`, text `#f4f0e6`/`#b8b3a6`. Keep new UI consistent with these tokens rather than introducing new colors.
